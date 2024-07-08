@@ -11,9 +11,12 @@ monitoring.ui.container.logstash.enabled: true
 
 ## X-Pack security credentials
 #
-elasticsearch.username: kibana_system
-elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
+elasticsearch.username: admin
+elasticsearch.password: admin
 
+# server.ssl.enabled: false
+
+# server.publicBaseUrl: http://0.0.0.0:5601
 ## Encryption keys (optional but highly recommended)
 ##
 ## Generate with either
@@ -36,7 +39,7 @@ xpack.fleet.outputs:
   - id: fleet-default-output
     name: default
     type: elasticsearch
-    hosts: [ http://elasticsearch:9200 ]
+    hosts: [ http://0.0.0.0.0:9200 ]
     is_default: true
     is_default_monitoring: true
 

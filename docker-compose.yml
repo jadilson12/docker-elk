@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
 
   # The 'setup' service runs a one-off script which initializes users inside
@@ -29,14 +27,14 @@ services:
       - ./setup/lib.sh:/lib.sh:ro,Z
       - ./setup/roles:/roles:ro,Z
     environment:
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
-      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-      METRICBEAT_INTERNAL_PASSWORD: ${METRICBEAT_INTERNAL_PASSWORD:-}
-      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
-      HEARTBEAT_INTERNAL_PASSWORD: ${HEARTBEAT_INTERNAL_PASSWORD:-}
-      MONITORING_INTERNAL_PASSWORD: ${MONITORING_INTERNAL_PASSWORD:-}
-      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+      ELASTIC_PASSWORD: admin
+      LOGSTASH_INTERNAL_PASSWORD: admin
+      KIBANA_SYSTEM_PASSWORD: admin
+      METRICBEAT_INTERNAL_PASSWORD: admin
+      FILEBEAT_INTERNAL_PASSWORD: admin
+      HEARTBEAT_INTERNAL_PASSWORD: admin
+      MONITORING_INTERNAL_PASSWORD: admin
+      BEATS_SYSTEM_PASSWORD: admin
     networks:
       - elk
     depends_on:
@@ -56,10 +54,13 @@ services:
     environment:
       node.name: elasticsearch
       ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ELASTIC_USERNAME: admin
+      http.cors.enabled: "false"
+      xpack.security.enabled: "false"
       # Bootstrap password.
       # Used to initialize the keystore during the initial startup of
       # Elasticsearch. Ignored on subsequent runs.
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      ELASTIC_PASSWORD: admin
       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
@@ -82,7 +83,7 @@ services:
       - 9600:9600
     environment:
       LS_JAVA_OPTS: -Xms256m -Xmx256m
-      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+      LOGSTASH_INTERNAL_PASSWORD: admin
     networks:
       - elk
     depends_on:
@@ -99,7 +100,8 @@ services:
     ports:
       - 5601:5601
     environment:
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: admin
+      # ELASTICSEARCH_HOSTS: http://0.0.0.00:9300
     networks:
       - elk
     depends_on:
